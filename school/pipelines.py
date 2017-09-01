@@ -44,6 +44,7 @@ class CsvWriterPipeline(object):
 
     def process_item(self, item, spider):
         row = self.extract_row_from_item(item)
+        row = [(d if d else '').replace(',', ' ').replace(u'，', ' ') for d in row] #Replace comma with space as comma is a delimiter in csv
         self.spamwriter.writerow(row)
         return item
 
