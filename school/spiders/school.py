@@ -4,6 +4,7 @@
 from scrapy.spiders import Spider
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor as sle
+from pprint import pprint
 
 from ..items import *
 
@@ -24,19 +25,21 @@ class SchoolSpider(CrawlSpider):
         name = response.css('div.wrap > p.schoolname > span.title::text').extract_first()
         ps = response.css('div.wrap > p.schoolname > span.info::text').extract_first()
         info_list = []
+        house_list = response.xpath('/html/body/div[2]/div[2]/ul/li/div[2]/h3/a[1]/text()').extract()
         items = []
+        item = SchoolItem()
 
         for info_item in response.xpath('/html/body/div[2]/div[2]/div[1]/div[2]/ul/li'):
             info_value = info_item.xpath('string(.)').extract_first()
             info_list.append(info_value)
 
-        item = SchoolItem()
         item['url'] = url
         item['name'] = name
         item['ps'] = ps
         item['info_list'] = info_list
-        items.append(item)
+        item['house_list'] = house_list
 
+        items.append(item)
         return items
 
 

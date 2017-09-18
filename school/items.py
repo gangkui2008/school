@@ -15,3 +15,4 @@ class SchoolItem(scrapy.Item):
     url = scrapy.Field()
     ps = scrapy.Field()
     info_list = scrapy.Field()
+    house_list = scrapy.Field()

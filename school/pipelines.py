@@ -19,7 +19,7 @@ class SchoolPipeline(object):
 
 class JsonWriterPipeline(object):
     def open_spider(self, spider):
-        self.file = open('items.jl', 'w')
+        self.file = open('./output/items.jl', 'w')
 
     def close_spider(self, spider):
         self.file.close()
@@ -34,9 +34,9 @@ class CsvWriterPipeline(object):
     def open_spider(self, spider):
         today = datetime.date.today()
         format_today = today.strftime('%Y%m%d')
-        self.file = open('武汉学校' + format_today + '.csv', 'wb')
+        self.file = open('./output/武汉学校' + format_today + '.csv', 'wb')
         self.spamwriter = csv.writer(self.file, encoding='utf-8-sig')
-        header = [u'学校', u'来源网址', u'学校概要', u'小区均价', u'在售房源', u'学校地址', u'周边小区', u'学校特色', u'学校电话', u'升学情况']
+        header = [u'学校', u'来源网址', u'学校概要', u'小区均价', u'在售房源', u'学校地址', u'周边小区', u'学校特色', u'学校电话', u'升学情况', u'小区']
         self.spamwriter.writerow(header)
 
     def close_spider(self, spider):
@@ -59,6 +59,7 @@ class CsvWriterPipeline(object):
         xuexiaotese = ''
         xuexiaodianhua = ''
         shengxueqingkuang = ''
+        xiaoqu = ''
 
         col_xiaoqujunjia = u'小区均价'
         col_zaishoufangyuan = u'在售房源'
@@ -81,6 +82,7 @@ class CsvWriterPipeline(object):
         url = item['url']
         ps = item['ps']
         info_list = item['info_list']
+        xiaoqu = ' '.join(item['house_list'])
 
         for info_item in info_list:
             if pattern_xiaoqujunjia.search(info_item):
@@ -114,7 +116,7 @@ class CsvWriterPipeline(object):
             else:
                 pass
 
-        row = [name, url, ps, xiaoqujunjia, zaishoufangyuan, xuexiaodizhi, zhoubianxiaoqu, xuexiaotese, xuexiaodianhua, shengxueqingkuang]
+        row = [name, url, ps, xiaoqujunjia, zaishoufangyuan, xuexiaodizhi, zhoubianxiaoqu, xuexiaotese, xuexiaodianhua, shengxueqingkuang, xiaoqu]
 
         return row
 
